@@ -1,0 +1,40 @@
+<section style="border: 1px solid #000; padding: 1rem; width: 500px;">
+  <div class="list-data" *ngIf="datas.length > 0">
+    <ng-container *ngFor="let data of datas">
+      <div *ngIf="data.type === TYPE_QUESTION.PARAGRAPH; else typeCheckBoxList" style="margin-bottom: 2rem">
+        <div style="font-weight: bold; font-size: 16px; margin-bottom: 0.5rem;">
+          {{data.question}}
+          <ng-container *ngIf="data.isRequired">*</ng-container>
+        </div>
+        <textarea style="width: 100%; height: 150px; box-sizing: border-box;" [(ngModel)]="data.answer"></textarea>
+      </div>
+      <ng-template #typeCheckBoxList>
+        <div style="margin-bottom: 2rem;">
+          <div style="font-weight: bold; font-size: 16px; margin-bottom: 0.5rem;">
+            {{data.question}}
+            <ng-container *ngIf="data.isRequired">*</ng-container>
+          </div>
+          <div style="display: flex;" *ngFor="let answer of data.answers; let i = index">
+            <input type="checkbox" [id]="i" (change)="change($event, data)" [value]="answer">
+            <label [for]="i">{{answer}}</label>
+          </div>
+          <div style="display: flex;">
+            <input type="checkbox" [id]="'other' + data.question" [(ngModel)]="data.isOtherChoose">
+            <label [for]="'other' + data.question">Other</label>
+            <input style="margin-left: 15px;" type="text" [(ngModel)]="data.answerOther" *ngIf="data.isOtherChoose">
+          </div>
+        </div>
+      </ng-template>
+    </ng-container>
+  </div>
+  <div style="text-decoration: underline; font-size: 15px; margin-bottom: 1rem; cursor: pointer;"
+    (click)="isShowModalAddQuestion = !isShowModalAddQuestion">
+    Add New Question </div>
+  <div style="display: flex; justify-content: end;" *ngIf="checkValid()">
+    <button (click)="viewAnswer()">Review my answer ></button>
+  </div>
+</section>
+
+<ng-container #modalAddQuestion *ngIf="isShowModalAddQuestion">
+  <app-modal [(isShowModalAddQuestion)]="isShowModalAddQuestion" (pushData)="datas.push($event)"></app-modal>
+</ng-container>

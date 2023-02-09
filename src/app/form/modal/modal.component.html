@@ -1,0 +1,38 @@
+<div class="modal">
+  <form [formGroup]="formAddNewQuestion" (ngSubmit)="submit()">
+    <h2>Add a New Question</h2>
+    <span style="position: absolute; right: 10px; top: 10px; cursor: pointer;" (click)="close()">X</span>
+    <div class="form-control">
+      <select formControlName="type">
+        <option [value]="TYPE_QUESTION.CHECK_BOX_LIST">CheckBox List</option>
+        <option [value]="TYPE_QUESTION.PARAGRAPH">Paragraph</option>
+      </select>
+    </div>
+    <div class="form-control">
+      <input type="text" formControlName="question" placeholder="Type question here">
+    </div>
+    <ng-container *ngIf="formAddNewQuestion.controls.type.value === TYPE_QUESTION.CHECK_BOX_LIST"
+      formArrayName="answers">
+      <div class="form-control" *ngFor="let answer of formAddNewQuestion.controls.answers.controls;let i = index"
+        [formGroupName]="i">
+        <input style="padding: 10px 25px 10px 10px" type="text" formControlName="answer"
+          placeholder="Add answer option">
+        <span style="position: absolute; right: 10px; top: 12px; cursor: pointer;" (click)="subAnswer(i)">X</span>
+      </div>
+      <div style="color: dodgerblue; cursor: pointer; margin-bottom: 0.75rem;" (click)="addAnswer()"
+        *ngIf="formAddNewQuestion.controls.answers.controls.length < 5">+ Add another question</div>
+    </ng-container>
+    <div class="form-control" *ngIf="formAddNewQuestion.controls.type.value === TYPE_QUESTION.CHECK_BOX_LIST">
+      <input type="checkbox" formControlName="isOther" id="isOther">
+      <label for="isOther">Allow user to specify their own answer</label>
+    </div>
+    <div class="form-control">
+      <input type="checkbox" formControlName="isRequired" id="isRequired">
+      <label for="isRequired">This field is required</label>
+    </div>
+    <div class="form-button">
+      <button type="submit" [ngStyle]="{cursor: !this.checkValid() ?'not-allowed':'default' }"
+        [disabled]="!this.checkValid()">Submit</button>
+    </div>
+  </form>
+</div>

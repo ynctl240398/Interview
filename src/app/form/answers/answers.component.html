@@ -1,0 +1,29 @@
+<section style="border: 1px solid #000; padding: 1rem; width: 500px;">
+  <div class="list-data" *ngIf="datas.length > 0">
+    <ng-container *ngFor="let data of datas">
+      <div *ngIf="data.type === TYPE_QUESTION.PARAGRAPH; else typeCheckBoxList" style="margin-bottom: 2rem;">
+        <div style="font-weight: bold; font-size: 16px; margin-bottom: 0.5rem;">
+          {{data.question}}
+          <ng-container *ngIf="data.isRequired">*</ng-container>
+        </div>
+        <label>{{data.answer}}</label>
+      </div>
+      <ng-template #typeCheckBoxList>
+        <div style="margin-bottom: 2rem;">
+          <div style="font-weight: bold; font-size: 16px; margin-bottom: 0.5rem;">
+            {{data.question}}
+            <ng-container *ngIf="data.isRequired">*</ng-container>
+          </div>
+          <div *ngFor="let answer of data.answerChoose">
+            <label>{{answer}}</label>
+          </div>
+          <div style="display: flex;" *ngIf="data.isOtherChoose">
+            <label>Other - {{data.answerOther}}</label>
+          </div>
+        </div>
+      </ng-template>
+    </ng-container>
+  </div>
+  <div style="text-decoration: underline; font-size: 15px; margin-bottom: 1rem; cursor: pointer;" (click)="back()">
+    Back to form builder </div>
+</section>
